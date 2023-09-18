@@ -1,0 +1,6 @@
+discord.py==2.1.0
+SQLAlchemy==1.4.42
+PyMySQL==1.0.2
+PyYAML==6.0.1
+jurigged==0.5.6
+cryptography==40.0.2

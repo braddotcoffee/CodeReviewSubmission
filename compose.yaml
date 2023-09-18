@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  bot:
+    build: .
+    entrypoint: jurigged -v bot.py
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db
+    configs:
+      - source: code-review-config
+        target: /config.yaml
+    secrets:
+      - source: code-review-secrets
+        target: /secrets.yaml
+  db:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: codereview
+      MYSQL_USER: codereviewuser
+      MYSQL_PASSWORD: testpassword
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - code-review-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 1s
+      interval: 1s
+      retries: 10
+configs:
+  code-review-config:
+    file: ./config.yaml
+secrets:
+  code-review-secrets:
+    file: ./secrets.yaml
+volumes:
+  code-review-db:
