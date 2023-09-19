@@ -32,7 +32,7 @@ class DescriptionModal(Modal, title="Temp"):
         self.parsed_url = parsed_url
         self.review_type = review_type
         self.title = f"Tell me about {parsed_url.repo}"
-        self.i_accept_text = "I accept"
+        self.i_accept_text = f"I accept"
 
         self.description = TextInput(
             label="What should I know about your project?",
@@ -46,7 +46,7 @@ class DescriptionModal(Modal, title="Temp"):
             username = username[: USERNAME_MAX_LENGTH - 3] + "..."
 
         self.i_accept = TextInput(
-            label=f"{username} will be shown on stream",
+            label=f"Your GitHub username will be shown on stream",
             placeholder=self.i_accept_text,
             min_length=len(self.i_accept_text),
             max_length=len(self.i_accept_text),
