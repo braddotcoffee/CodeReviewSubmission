@@ -9,11 +9,10 @@ from config import YAMLConfig as Config
 import logging
 
 discord.utils.setup_logging(level=logging.INFO, root=True)
-GUILD_ID = Config.CONFIG["Discord"]["GuildID"]
+
 
 class CodeReviewBot(Client):
     def __init__(self):
-
         intents = Intents.default()
         intents.members = True
         intents.message_content = True
@@ -30,6 +29,7 @@ class CodeReviewBot(Client):
 
     async def on_guild_join(self, guild: Guild):
         await SyncController.sync_commands(self.tree, guild)
+
 
 async def main():
     client = CodeReviewBot()
