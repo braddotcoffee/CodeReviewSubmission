@@ -1,45 +1,40 @@
 version: "3.8"
 services:
-  bot:
+  prod-bot:
     build: .
-    entrypoint: jurigged -v bot.py
-    volumes:
-      - .:/app
     depends_on:
-      db:
+      prod-db:
         condition: service_healthy
     links:
-      - db
+      - prod-db
     configs:
-      - source: code-review-config
+      - source: code-review-config-prod
         target: /app/config.yaml
     secrets:
-      - source: code-review-secrets
+      - source: code-review-secrets-prod
         target: /app/secrets.yaml
-  db:
+  prod-db:
     image: mysql
     environment:
       MYSQL_DATABASE: codereview
       MYSQL_USER: codereviewuser
-      MYSQL_PASSWORD: testpassword
+      MYSQL_PASSWORD: ${PROD_DB_PASSWORD}
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    ports:
-      - '3306:3306'
     expose:
       - '3306'
     volumes:
-      - code-review-db:/var/lib/mysql
+      - code-review-db-prod:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 1s
       interval: 1s
       retries: 10
 configs:
-  code-review-config:
-    file: ./config.yaml
+  code-review-config-prod:
+    file: ./config-prod.yaml
 secrets:
-  code-review-secrets:
-    file: ./secrets.yaml
+  code-review-secrets-prod:
+    file: ./secrets-prod.yaml
 volumes:
-  code-review-db:
+  code-review-db-prod:

@@ -1,5 +1,5 @@
-from discord import app_commands, Interaction, Client, User
-from views.submit_review import SubmitReviewModal, DescriptionModal
+from discord import app_commands, Interaction, Client
+from views.submit_review import SubmitReviewModal
 
 
 @app_commands.guild_only()
