@@ -7,7 +7,7 @@ from db.code_review import CodeReviewDB
 from config import YAMLConfig as Config
 import re
 
-URL_REGEX = re.compile(r"^https:\/\/github.com\/(\w+)\/(\w+)(?:\/tree\/(\w+))?")
+URL_REGEX = re.compile(r"^https:\/\/github.com\/([\w\-\.]+)\/([\w\-\.]+)(?:\/tree\/(\w+))?")
 CODE_REVIEW_DB = CodeReviewDB(DB())
 CODE_REVIEW_CHANNEL = Config.CONFIG["Discord"]["CodeReview"]["Channel"]
 NEEDS_REVIEW_TAG = Config.CONFIG["Discord"]["CodeReview"]["NeedsReviewTag"]
