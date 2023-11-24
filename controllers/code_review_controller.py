@@ -26,6 +26,9 @@ class CodeReviewController:
 
     @staticmethod
     async def create_review(code_review: CodeReview, interaction: Interaction):
+        if not CODE_REVIEW_DB.db or not CODE_REVIEW_DB.db.session:
+            CODE_REVIEW_DB.db = DB()
+
         code_review_channel = interaction.guild.get_channel(CODE_REVIEW_CHANNEL)
         if code_review_channel is None:
             return await interaction.response.send_message(

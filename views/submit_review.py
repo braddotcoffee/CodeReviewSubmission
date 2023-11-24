@@ -11,6 +11,9 @@ USERNAME_MAX_LENGTH = 20
 
 class SubmitReviewModal(Modal, title="Submit your project for code review!"):
     url = TextInput(label="Link to your project (github.com)")
+    
+    def __init__(self):
+        super().__init__(timeout=None)
 
     async def on_submit(self, interaction: Interaction):
         provided_url = self.url.value

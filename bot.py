@@ -25,6 +25,9 @@ class CodeReviewBot(Client):
         self.tree = app_commands.CommandTree(self)
 
     async def on_ready(self):
+        # for guild in self.guilds:
+        #     await SyncController.sync_commands(self.tree, guild)
+
         logging.info(f"Logged in as {self.user} (ID: {self.user.id})")
 
     async def on_guild_join(self, guild: Guild):

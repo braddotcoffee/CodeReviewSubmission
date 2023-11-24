@@ -1,9 +1,0 @@
-Database:
-  Username: codereviewuser
-  Host: prod-db
-  Name: codereview
-Discord:
-  ModeratorRole: 1067233962650505237 
-  CodeReview:
-    Channel: 1153140203729461278
-    NeedsReviewTag: 1153152927930789978

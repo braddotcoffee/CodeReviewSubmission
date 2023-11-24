@@ -1,0 +1,9 @@
+Database:
+  Username: codereviewuser
+  Host: localhost # prod-db for production
+  Name: codereview
+Discord:
+  ModeratorRole: YOUR_MODERATOR_ROLE_ID
+  CodeReview:
+    Channel: YOUR_CODE_REVIEW_CHANNEL_ID
+    NeedsReviewTag: YOUR_REVIEW_TAG_ID
