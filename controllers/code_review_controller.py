@@ -26,10 +26,11 @@ class CodeReviewController:
 
     @staticmethod
     async def create_review(code_review: CodeReview, interaction: Interaction):
+        await interaction.response.defer(ephemeral=True)
         code_review_channel = interaction.guild.get_channel(CODE_REVIEW_CHANNEL)
         if code_review_channel is None:
-            return await interaction.response.send_message(
-                f"Failed to submit code review, please try again.", ephemeral=True
+            return await interaction.followup.send(
+                f"Failed to submit code review, please try again."
             )
 
         needs_review_tag = code_review_channel.get_tag(NEEDS_REVIEW_TAG)
@@ -46,6 +47,6 @@ class CodeReviewController:
         )
         code_review.message_id = thread.thread.id
         CODE_REVIEW_DB.new_code_review(code_review)
-        await interaction.response.send_message(
-            f"Code review submitted!", ephemeral=True
+        await interaction.followup.send(
+            f"Code review submitted!"
         )
