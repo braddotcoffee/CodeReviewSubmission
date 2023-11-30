@@ -36,7 +36,7 @@ class CodeReviewDB:
         self.db = db
 
     def new_code_review(self, code_review: CodeReviewModel):
-        with self.db.session() as sess:
+        with self.db.get_session() as sess:
             sess.execute(insert(CodeReview).values(
                 guild_id=code_review.guild_id,
                 message_id=code_review.message_id,
