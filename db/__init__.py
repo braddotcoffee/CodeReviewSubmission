@@ -3,6 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import declarative_base
 
+ONE_HOUR = 3600
+
 Base = declarative_base()
 
 class DB:
@@ -27,6 +29,8 @@ class DB:
 
         self.engine = create_engine(
             f"mysql+pymysql://{username}:{password}@{db_host}/{db_name}",
+            pool_recycle=ONE_HOUR,
+            pool_pre_ping=True
         )
         self.session = sessionmaker(self.engine, autoflush=True, autocommit=True)
 
