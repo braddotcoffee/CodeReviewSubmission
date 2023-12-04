@@ -1,6 +1,7 @@
 from typing import Optional
 
 from discord import Interaction
+from controllers.repo_controller import RepoController
 from models.code_review import CodeReview, CodeReviewURL
 from db import DB
 from db.code_review import CodeReviewDB
@@ -34,18 +35,20 @@ class CodeReviewController:
 
         needs_review_tag = code_review_channel.get_tag(NEEDS_REVIEW_TAG)
         _, parsed_url = CodeReviewController.validate_url(code_review.url)
+        await interaction.response.send_message("Creating mirror repository...", ephemeral=True)
+        mirror_url = RepoController.mirror(parsed_url.url)
         thread = await code_review_channel.create_thread(
             name=f"{interaction.user.display_name} | {parsed_url.repo} ({code_review.review_type.value})",
             applied_tags=[needs_review_tag],
             content=(
                 f"User: {interaction.user.mention}\n"
-                f"GitHub Link: {code_review.url}\n\n"
+                f"GitHub Link: {mirror_url}\n\n"
                 "Description:\n"
                 f"{code_review.description}"
             ),
         )
         code_review.message_id = thread.thread.id
         CODE_REVIEW_DB.new_code_review(code_review)
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f"Code review submitted!", ephemeral=True
         )

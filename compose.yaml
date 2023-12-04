@@ -16,6 +16,8 @@ services:
     secrets:
       - source: code-review-secrets
         target: /app/secrets.yaml
+      - source: ssh-key
+        target: /root/.ssh/id_ed25519
   db:
     image: mysql
     environment:
@@ -39,5 +41,7 @@ configs:
 secrets:
   code-review-secrets:
     file: ./secrets.yaml
+  ssh-key:
+    file: ~/.ssh/id_ed25519
 volumes:
   code-review-db:
