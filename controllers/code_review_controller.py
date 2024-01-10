@@ -8,7 +8,7 @@ from db.code_review import CodeReviewDB
 from config import YAMLConfig as Config
 import re
 
-URL_REGEX = re.compile(r"^https:\/\/github.com\/([\w\-\.]+)\/([\w\-\.]+)(?:\/tree\/(\w+))?")
+URL_REGEX = re.compile(r"^(https:\/\/)?github.com\/([\w\-\.]+)\/([\w\-\.]+)(?:\/tree\/(\w+))?\/pull\/\d+")
 CODE_REVIEW_DB = CodeReviewDB(DB())
 CODE_REVIEW_CHANNEL = Config.CONFIG["Discord"]["CodeReview"]["Channel"]
 NEEDS_REVIEW_TAG = Config.CONFIG["Discord"]["CodeReview"]["NeedsReviewTag"]
@@ -22,7 +22,7 @@ class CodeReviewController:
         if matches is None:
             return False, None
 
-        owner, repo, branch = matches.groups()
+        _, owner, repo, branch = matches.groups()
         return True, CodeReviewURL(url, owner, repo, branch)
 
     @staticmethod
@@ -35,20 +35,15 @@ class CodeReviewController:
 
         needs_review_tag = code_review_channel.get_tag(NEEDS_REVIEW_TAG)
         _, parsed_url = CodeReviewController.validate_url(code_review.url)
-        await interaction.response.send_message("Creating mirror repository...", ephemeral=True)
-        mirror_url = RepoController.mirror(parsed_url.url)
         thread = await code_review_channel.create_thread(
             name=f"{interaction.user.display_name} | {parsed_url.repo} ({code_review.review_type.value})",
             applied_tags=[needs_review_tag],
             content=(
                 f"User: {interaction.user.mention}\n"
-                f"GitHub Link: {mirror_url}\n\n"
+                f"GitHub Link: {parsed_url.url}\n\n"
                 "Description:\n"
                 f"{code_review.description}"
             ),
         )
         code_review.message_id = thread.thread.id
         CODE_REVIEW_DB.new_code_review(code_review)
-        await interaction.followup.send(
-            f"Code review submitted!", ephemeral=True
-        )
