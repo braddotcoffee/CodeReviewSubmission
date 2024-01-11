@@ -39,7 +39,7 @@ class SubmitReviewModal(Modal, title="Submit your project for code review!"):
         valid, parsed_url = CodeReviewController.validate_url(provided_url)
         if not valid:
             await interaction.response.send_message(
-                "Invalid project URL provided - only GitHub PR links accepted",
+                "Invalid project URL provided - only GitHub PR or commit links accepted",
                 ephemeral=True,
             )
 

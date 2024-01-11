@@ -1,14 +1,17 @@
 from typing import Optional
 
 from discord import Interaction
-from controllers.repo_controller import RepoController
 from models.code_review import CodeReview, CodeReviewURL
 from db import DB
 from db.code_review import CodeReviewDB
 from config import YAMLConfig as Config
 import re
 
-URL_REGEX = re.compile(r"^(https:\/\/)?github.com\/([\w\-\.]+)\/([\w\-\.]+)(?:\/tree\/(\w+))?\/pull\/\d+")
+OWNER_GROUP = 1
+REPO_GROUP = 2
+BRANCH_GROUP = 3
+
+URL_REGEX = re.compile(r"^(https:\/\/)?github.com\/([\w\-\.]+)\/([\w\-\.]+)(?:\/tree\/(\w+))?\/(pull|commit)\/(\d+|\w+)")
 CODE_REVIEW_DB = CodeReviewDB(DB())
 CODE_REVIEW_CHANNEL = Config.CONFIG["Discord"]["CodeReview"]["Channel"]
 NEEDS_REVIEW_TAG = Config.CONFIG["Discord"]["CodeReview"]["NeedsReviewTag"]
@@ -22,7 +25,10 @@ class CodeReviewController:
         if matches is None:
             return False, None
 
-        _, owner, repo, branch = matches.groups()
+        capture_groups = matches.groups()
+        owner = capture_groups[OWNER_GROUP]
+        repo = capture_groups[REPO_GROUP]
+        branch = capture_groups[BRANCH_GROUP]
         return True, CodeReviewURL(url, owner, repo, branch)
 
     @staticmethod
