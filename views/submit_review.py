@@ -58,4 +58,4 @@ class SubmitReviewModal(Modal, title="Submit your project for code review!"):
             review_type=CodeReviewType.general,
         )
         await CodeReviewController.create_review(code_review, interaction)
-        await interaction.response.send_message("Successfully created code review!")
+        await interaction.response.send_message("Successfully created code review!", ephemeral=True)

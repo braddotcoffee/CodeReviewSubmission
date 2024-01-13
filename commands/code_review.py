@@ -1,4 +1,5 @@
 from discord import app_commands, Interaction, Client
+from views.submit_design import SubmitDesignReviewModal
 from views.submit_review import SubmitReviewModal
 
 
@@ -13,3 +14,8 @@ class CodeReviewCommands(app_commands.Group, name="code_review"):
     async def submit(self, interaction: Interaction):
         """Submit project for code review"""
         await interaction.response.send_modal(SubmitReviewModal())
+
+    @app_commands.command()
+    async def design(self, interaction: Interaction):
+        """Submit for assistance in designing your next feature!"""
+        await interaction.response.send_modal(SubmitDesignReviewModal())

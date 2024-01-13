@@ -53,3 +53,22 @@ class CodeReviewController:
         )
         code_review.message_id = thread.thread.id
         CODE_REVIEW_DB.new_code_review(code_review)
+
+    @staticmethod
+    async def create_design(description: str, interaction: Interaction):
+        code_review_channel = interaction.guild.get_channel(CODE_REVIEW_CHANNEL)
+        if code_review_channel is None:
+            return await interaction.response.send_message(
+                f"Failed to submit code review, please try again.", ephemeral=True
+            )
+
+        needs_review_tag = code_review_channel.get_tag(NEEDS_REVIEW_TAG)
+        await code_review_channel.create_thread(
+            name=f"{interaction.user.display_name} | (Design Review)",
+            applied_tags=[needs_review_tag],
+            content=(
+                f"User: {interaction.user.mention}\n"
+                "Description:\n"
+                f"{description}"
+            ),
+        )
