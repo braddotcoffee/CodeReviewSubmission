@@ -8,7 +8,7 @@ from controllers.code_review_controller import CodeReviewController
 class SubmitDesignReviewModal(Modal, title="Submit your design for review!"):
     def __init__(self):
         super().__init__(timeout=None)
-        self.title = f"Tell me about your repo"
+        self.title = f"Tell me about your feature"
         self.i_accept_text = f"I accept"
 
         self.description = TextInput(
